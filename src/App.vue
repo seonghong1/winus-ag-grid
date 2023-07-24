@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="title">1. 행 선택 (CheckBox Selector)</div>
-  <Test1Page />
-  <div class="title">2. 페이징</div>
+  <Test1Page /> -->
+  <!-- <div class="title">2. 페이징</div>
   <Test2Page />
   <div class="title">3. 행 병합</div>
   <Test3Page />
@@ -22,15 +22,15 @@
   <div class="title">11. 행 스타일 분류</div>
   <Test11Page />
   <div class="title">12. Component</div>
-  <Test12Page />
-  <div class="title">13. Excel Export</div> -->
-  <!-- <Test13Page /> -->
-  <div class="title">14. 통합 샘플</div>
+  <Test12Page /> -->
+  <div class="title">13. Excel Export</div>
+  <Test13Page />
+  <!-- <div class="title">14. 통합 샘플</div> -->
   <Test14Page />
 </template>
 
 <script setup lang="ts">
-// import Test1Page from './components/Test1Page.vue';
+// import Test1Page from "./components/Test1Page.vue";
 // import Test2Page from './components/Test2Page.vue';
 // import Test3Page from './components/Test3Page.vue';
 // import Test4Page from './components/Test4Page.vue';
@@ -42,8 +42,8 @@
 // import Test10Page from './components/Test10Page.vue';
 // import Test11Page from './components/Test11Page.vue';
 // import Test12Page from './components/Test12Page.vue';
-// import Test13Page from './components/Test13Page.vue';
-import Test14Page from './components/Test14Page.vue';
+import Test13Page from "./components/Test13Page.vue";
+// import Test14Page from './components/Test14Page.vue';
 </script>
 
 <style scoped>
