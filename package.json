@@ -12,9 +12,12 @@
     "ag-grid-community": "^30.0.3",
     "ag-grid-enterprise": "^30.0.3",
     "ag-grid-vue3": "^30.0.3",
+    "lodash": "^4.17.21",
+    "pinia": "^2.1.4",
     "vue": "^3.2.47"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.195",
     "@vitejs/plugin-vue": "^4.1.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
