@@ -16,6 +16,11 @@
 </template>
 
 <script setup lang="ts">
+interface countByI {
+  data: RowI;
+  count: number;
+  startIndex: number;
+}
 //ag-grid
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -23,19 +28,16 @@ import { AgGridVue } from "ag-grid-vue3";
 import type { GridOptions } from "ag-grid-community";
 import { CellClassParams } from "ag-grid-community";
 import { RowSpanParams } from "ag-grid-community";
-import { GridApi } from "ag-grid-community";
 //vue
 import { computed } from "vue";
 import { dummy_data } from "../../dummy";
 import HeaderCheckboxTest from "../renderer/HeaderCheckboxTest.vue";
 //store
 import { useAllCheckStore } from "../store/allCheck";
-import { storeToRefs } from "pinia";
-
+import { RowI } from "../types/row.type";
 const AllCheckStore = useAllCheckStore();
 
-const countByAddress = conuntSpanrowByAddress("ADDR");
-let paramsApi: GridApi | null = null;
+const countByAddress = conuntSpanrowByAddress("ADDR") as typeof dummy_data;
 
 const columnDefs = [
   {
@@ -69,14 +71,10 @@ const gridOptions: GridOptions = {
   suppressRowTransform: true, // 병합 전제조건
   rowBuffer: 100,
   rowSelection: "multiple",
-  onGridReady: onGridReady,
 };
-function onGridReady(params: any) {
-  paramsApi = params.api;
-}
 
 //store checked
-function checkAllrow(e: Event) {
+function checkAllrow() {
   if (AllCheckStore.checkedArr.value.length === 0) {
     return AllCheckStore.checkedAllRow(dummy_data);
   }
@@ -107,10 +105,10 @@ function rowSpan(params: RowSpanParams) {
 }
 
 // cellspan 유틸함수
-function conuntSpanrowByAddress(key) {
-  const countByAddress = {};
+function conuntSpanrowByAddress(key: string) {
+  const countByAddress = {} as countByI;
 
-  dummy_data.forEach((data: string, index: number) => {
+  dummy_data.forEach((data: RowI, index: number) => {
     // countByAddress객체인에 해당key값을 가진 데이터가 없는경우
     if (!countByAddress[data[key]]) {
       // 키값 : {} 형태로 삽입
