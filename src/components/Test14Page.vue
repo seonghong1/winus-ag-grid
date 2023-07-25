@@ -1,5 +1,6 @@
 <template>
   <div style="height: 100%">
+    <input type="checkbox" :checked="checked" @click="allCheckHandler" />
     <AgGridVue
       style="width: 90%; height: 600px"
       class="ag-theme-alpine"
@@ -29,12 +30,29 @@ import CheckboxRenderer from "../renderer/CheckboxRenderer.vue";
 import CheckboxRendererSecond from "../renderer/CheckboxRendererSecond.vue";
 import { countSpanRow } from "../utils/spanRow";
 import { useCheckStore } from "../store/check";
+import { computed } from "vue";
+import { RowI } from "../types/row.type";
 
 LicenseManager.setLicenseKey(KEY);
 
 const store = useCheckStore();
 
 const countByDate = countSpanRow("ORG_ORD_ID") as typeof dummy_data;
+
+const checked = computed(
+  () => store.checkedArr.value.length === dummy_data.length
+);
+// 더미데이터를 기준으로 연산 -> 스토어에서 빼줌
+const uniqueKeyData = dummy_data.filter(
+  (row: RowI, i: number, _allData: RowI[]) => {
+    console.log("rerander");
+    return row.ORG_ORD_ID !== _allData[i + 1]?.ORG_ORD_ID;
+  }
+);
+
+const allCheckHandler = () => {
+  store.allCheckHandler(dummy_data, dummy_data.length, uniqueKeyData);
+};
 
 const columnDefs: ColDef[] = [
   {
@@ -175,5 +193,12 @@ function cellSpanRule(params: CellClassParams) {
 <style scoped>
 .grid-cell-centered {
   text-align: center;
+}
+
+input {
+  position: absolute;
+  top: 80px;
+  left: 25px;
+  z-index: 10;
 }
 </style>

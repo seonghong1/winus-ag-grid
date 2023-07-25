@@ -5,6 +5,8 @@
       style="width: 90%; height: 600px"
       class="ag-theme-alpine"
       :gridOptions="gridOptions"
+      :enableRangeSelection="true"
+      :copyHeadersToClipboard="false"
     />
   </div>
 </template>
@@ -15,12 +17,18 @@ import "ag-grid-enterprise";
 import { LicenseManager } from "ag-grid-enterprise";
 import { dummy_data } from "../../dummy";
 import { KEY } from "../../key";
-
+import type {
+  ExcelExportParams,
+  GridOptions,
+  GridParams,
+} from "ag-grid-enterprise";
+import type { GridApi } from "ag-grid-enterprise";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 LicenseManager.setLicenseKey(KEY);
-const gridOptions = {
+let gridApi: GridApi | null = null;
+const gridOptions: GridOptions = {
   columnDefs: [
     {
       headerName: "원주문번호",
@@ -41,7 +49,28 @@ const gridOptions = {
   ],
   rowData: dummy_data,
   rowSelection: "multiple",
+  onGridReady: onGridReady,
 };
+function onGridReady(params: any) {
+  console.log(params);
+  gridApi = params.api;
+}
+const exportExcelParams: ExcelExportParams = {
+  fileName: "export.xlsx",
+  sheetName: "data sheet",
+};
+
+function exportData() {
+  // 드레그한 영역만 선택
+  const dragRange = gridApi?.getSelectedNodes().map((node) => node.data);
+
+  // 체크박스 선택된 row 선택
+  // const selectionRange = gridApi?.getSelectedRows();
+  // console.log(gridApi?.getSelectedRows());
+  //excel로 export
+  // gridApi?.exportDataAsExcel(exportExcelParams, { data: dragRange });
+}
+
 // const columnDefs = [
 //   // {
 //   //   headerName: '명세일자',

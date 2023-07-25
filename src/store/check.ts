@@ -11,6 +11,20 @@ export const useCheckStore = defineStore("check", () => {
   // rowspan 만들때 사용한 객체
   const countByDate = countSpanRow("ORG_ORD_ID");
 
+  const allCheckHandler = (
+    allData: RowI[],
+    allDataLength: number,
+    uniqueKeyData: RowI[]
+  ) => {
+    if (checkedArr.value.length === allDataLength) {
+      checkedSpanRow.value = [];
+      checkedArr.value = [];
+    } else {
+      checkedArr.value = [...allData];
+      checkedSpanRow.value = uniqueKeyData;
+    }
+  };
+
   // 왼쪽 체크박스 클릭시 호출
   const selectRowSpanData = (selectData: RowI, rowData: RowI[]) => {
     // 내가 클릭릭한 rowdata의 id의 count
@@ -109,6 +123,7 @@ export const useCheckStore = defineStore("check", () => {
   return {
     checkedSpanRow,
     checkedArr,
+    allCheckHandler,
     selectRowSpanData,
     selectRowData,
   };

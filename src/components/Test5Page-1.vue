@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { AgGridVue } from "ag-grid-vue3";
-import { onMounted } from "vue";
+
 import "ag-grid-enterprise";
 import { LicenseManager } from "ag-grid-enterprise";
 
@@ -93,8 +93,6 @@ const columnDefs = [
 ];
 
 const rowData = dummy_data;
-
-onMounted(() => {});
 </script>
 
 <style scoped></style>

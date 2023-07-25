@@ -1,17 +1,18 @@
 <template>
   <div style="height: 100%">
     <AgGridVue
-      style="width: 90%; height: 1000px"
+      style="width: 90%; height: 600px"
       class="ag-theme-alpine"
       :columnDefs="columnDefs"
       :rowData="rowData"
+      :getContextMenuItems="getContextMenuItems"
+      :allowContextMenuWithControlKey="true"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { AgGridVue } from "ag-grid-vue3";
-import { onMounted } from "vue";
 import "ag-grid-enterprise";
 import { LicenseManager } from "ag-grid-enterprise";
 
@@ -25,16 +26,16 @@ LicenseManager.setLicenseKey(KEY);
 
 const columnDefs = [
   {
-    headerName: "원주문번호(문자)",
+    headerName: "원주문번호",
     field: "ORG_ORD_ID",
     width: 250,
-    filter: "agTextColumnFilter",
+    filter: "agSetColumnFilter",
   },
   {
-    headerName: "주문번호(숫자)",
+    headerName: "주문번호",
     field: "ORD_ID",
-    width: 150,
-    filter: "agNumberColumnFilter",
+    width: 120,
+    filter: "agSetColumnFilter",
   },
   {
     headerName: "SEQ",
@@ -61,10 +62,10 @@ const columnDefs = [
     filter: "agSetColumnFilter",
   },
   {
-    headerName: "출고예정일(날짜)",
+    headerName: "출고예정일",
     field: "OUT_REQ_DT",
-    width: 160,
-    filter: "agDateColumnFilter",
+    width: 130,
+    filter: "agSetColumnFilter",
   },
   {
     headerName: "수화인",
@@ -91,10 +92,43 @@ const columnDefs = [
     filter: "agSetColumnFilter",
   },
 ];
-
+const getContextMenuItems = (params: any) => {
+  const result = [
+    {
+      // custom item
+      name: "Alert " + params.value,
+      action: () => {
+        window.alert("Alerting about " + params.value);
+      },
+      cssClasses: ["redFont", "bold"],
+    },
+    {
+      name: "Country",
+      subMenu: [
+        {
+          name: "Ireland",
+          action: () => {
+            console.log("Ireland was pressed");
+          },
+        },
+        {
+          name: "UK",
+          action: () => {
+            console.log("UK was pressed");
+          },
+        },
+        {
+          name: "France",
+          action: () => {
+            console.log("France was pressed");
+          },
+        },
+      ],
+    },
+  ];
+  return result;
+};
 const rowData = dummy_data;
-
-onMounted(() => {});
 </script>
 
 <style scoped></style>

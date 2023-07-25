@@ -1,21 +1,18 @@
 <template>
-  <div style="height: 100%">
-    <AgGridVue
-      style="width: 90%; height: 600px"
-      class="ag-theme-alpine"
-      :gridOptions="gridOptions"
-    />
-  </div>
+  <div></div>
+  <AgGridVue
+    style="width: 100vw; height: 500px"
+    class="ag-theme-alpine"
+    :gridOptions="gridOptions"
+  />
 </template>
 
 <script setup lang="ts">
 import { AgGridVue } from "ag-grid-vue3";
-import { dummy_data } from "../../dummy.js";
-import { GridOptions } from "ag-grid-community";
-
+import type { GridOptions } from "ag-grid-community";
+import { dummy_data } from "../../dummy";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-
 const columnDefs = [
   { headerName: "원주문번호", field: "ORG_ORD_ID", width: 250, sortable: true },
   { headerName: "주문번호", field: "ORD_ID", width: 120, sortable: true },
@@ -34,15 +31,12 @@ const columnDefs = [
   { headerName: "주소", field: "ADDR", width: 300 },
   { headerName: "판매처", field: "DATA_SENDER_NM", width: 100 },
 ];
-
-const rowData = dummy_data;
-
 const gridOptions: GridOptions = {
   columnDefs: columnDefs,
-  rowData: rowData,
+  rowData: dummy_data,
   pagination: true,
   paginationPageSize: 100,
 };
 </script>
 
-<style scoped></style>
+<style></style>
