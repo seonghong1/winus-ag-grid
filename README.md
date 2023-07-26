@@ -1,5 +1,14 @@
 ### 메모
 
+```
+ - spanrow checkbox부분 복기
+ - excel export 작업 완료하기(드레그, selected영역)
+ - 배열 객체 학습 someObj.value = {...someObj, ...data}
+    - 스프레드
+    - 포함여부, boolean반환(some, includes) / 요소인덱스 (index) / 순회하면서 필터링(map, foreach) / 그외 , ,,
+    - 배열[objKEY] 문법 다시보기(utils폴더)
+```
+
 ## 2. 페이징 — done
 
 - grid에서 제공해주는 api를 사용하기 위해서 gridOption에 onGridReady를 추가해주어 params.api를 변수에 할당해준다
@@ -69,3 +78,7 @@ AgGridVue 컴포넌트에서 2가지 옵션으로 구현
   - .ag-row-focus {background-color: rgb(8, 251, 0);}
 - 행의 체크박스 checked시
 - .ag-theme-alpine {--ag-selected-row-background-color: rgb(64, 0, 255)}
+
+## 12. cellranderer
+
+- 셀영역에 데이터를 특정 컴포넌트로

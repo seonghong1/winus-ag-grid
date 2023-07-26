@@ -5,6 +5,7 @@
       class="ag-theme-alpine"
       :columnDefs="columnDefs"
       :rowData="rowData"
+      
     />
   </div>
 </template>
