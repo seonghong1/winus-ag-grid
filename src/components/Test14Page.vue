@@ -6,6 +6,7 @@
       class="ag-theme-alpine"
       :defaultColDef="defaultColDef"
       :gridOptions="gridOptions"
+      @row-selected="onRowSelected"
     />
   </div>
 
@@ -17,12 +18,12 @@
 <script setup lang="ts">
 import { AgGridVue } from 'ag-grid-vue3';
 import 'ag-grid-enterprise';
-import { ColDef, LicenseManager } from 'ag-grid-enterprise';
+import { IRowNode, ColDef, LicenseManager } from 'ag-grid-enterprise';
 
 import { dummy_data } from '../../dummy';
 import { KEY } from '../../key';
 
-import { GridOptions, CellClassParams, RowSpanParams } from 'ag-grid-community';
+import { GridOptions, CellClassParams, RowSpanParams, RowSelectedEvent } from 'ag-grid-community';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -61,6 +62,7 @@ const columnDefs: ColDef[] = [
     cellClassRules: {
       'cell-span': cellSpanRule,
     },
+    // headerCheckboxSelection: true,
     width: 50,
   },
   {
@@ -68,6 +70,7 @@ const columnDefs: ColDef[] = [
     field: '',
     cellRenderer: CheckboxRendererSecond,
     width: 50,
+    // cellRendererSelector: CellRendererSelector
   },
   {
     headerName: '주문정보',
@@ -88,6 +91,7 @@ const columnDefs: ColDef[] = [
         field: 'ORD_ID',
         headerName: '주문번호',
         width: 150,
+        checkboxSelection: true
       },
       {
         field: 'ORD_SEQ',
@@ -186,6 +190,16 @@ function cellSpanRule(params: CellClassParams) {
     countByDate[data].count !== 1
   );
 }
+
+function onRowSelected(event:RowSelectedEvent) {
+
+  const rowNode:IRowNode = event.node;
+
+  if(rowNode.isSelected()){
+    window.alert(`[선택 값]\n원주문번호: ${event.node.data.ORG_ORD_ID}\n주문번호: ${event.node.data.ORD_ID}\n주문SEQ: ${event.node.data.ORD_SEQ}`);
+  }
+}
+
 </script>
 
 <style scoped>

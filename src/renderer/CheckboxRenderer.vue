@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { ColumnApi } from 'ag-grid-community';
-import { Column } from 'ag-grid-community';
+import { Column, RowNode } from 'ag-grid-community';
+import { ColumnApi, GridApi } from 'ag-grid-community';
 import { useCheckStore } from '../store/check';
 import { computed } from 'vue';
 import { countSpanRow } from '../utils/spanRow';
@@ -15,9 +15,12 @@ const props: any = defineProps({});
 const store = useCheckStore();
 
 const rowData = props.params.data;
+const api: GridApi = props.params.api;
+const rowNode: RowNode = api.getRowNode(props.params.rowIndex) as RowNode;
 const colApi: ColumnApi = props.params.columnApi;
 // 테이블의 모든 rowdata정보
 const cols: Column | null = colApi.getColumn('ORG_ORD_ID');
+
 // @ts-ignore ///
 const allRowData = cols?.gridOptionsService.gridOptions.rowData;
 
@@ -26,14 +29,20 @@ const countByDate = countSpanRow('ORG_ORD_ID');
 const checked = computed(
   // countByDate.count와 checkedArr를 핉터한 length가 같을때
   () =>
-    countByDate[rowData.ORG_ORD_ID].count ===
+  {
+    return countByDate[rowData.ORG_ORD_ID].count ===
     store.checkedArr.value.filter(
       (row) => row.ORG_ORD_ID === rowData.ORG_ORD_ID
-    ).length
+    ).length;
+  }
+    
 );
 
 const selectHandler = () => {
   store.selectRowSpanData(rowData, allRowData);
+  
+  // TODO :: Span 대상 Row Index를 받아, selected 처리
+  // rowNode.setSelected(true);
 };
 </script>
 
