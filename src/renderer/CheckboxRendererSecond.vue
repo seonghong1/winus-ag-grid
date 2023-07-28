@@ -16,13 +16,12 @@ const rowNode: RowNode = api.getRowNode(props.params.rowIndex) as RowNode;
 const rowData = props.params.data;
 
 // checked 값
-const checked = computed(
-  () => {
-    return ((store.checkedArr.value.findIndex((row) => row.ORD_ID === rowData.ORD_ID) > -1)
-              || rowNode.isSelected()) as boolean;
-    // return (store.checkedArr.value.findIndex((row) => row.ORD_ID === rowData.ORD_ID) > -1);
-  }
-);
+const checked = computed(() => {
+  return (store.checkedArr.value.findIndex(
+    (row) => row.ORD_ID === rowData.ORD_ID
+  ) > -1 || rowNode.isSelected()) as boolean;
+  // return (store.checkedArr.value.findIndex((row) => row.ORD_ID === rowData.ORD_ID) > -1);
+});
 
 const checkHandler = () => {
   rowNode.setSelected(true);

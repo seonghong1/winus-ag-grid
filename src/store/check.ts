@@ -116,8 +116,25 @@ export const useCheckStore = defineStore('check', () => {
       }
     }
 
-    console.log('checkedSpanRow', checkedSpanRow.value);
     console.log('checkedArr', checkedArr.value);
+  };
+  // 체크박스
+  // false -> true
+  const addCheckedArr = (data: RowI) => {
+    if (
+      checkedArr.value.findIndex(
+        (checkedItem) => checkedItem.ORD_ID === data.ORD_ID
+      ) === -1
+    ) {
+      checkedArr.value.push(data);
+    }
+  };
+  // true->false
+  const removeCheckedArr = (data: RowI) => {
+    const index = checkedArr.value.findIndex(
+      (checkedItem) => checkedItem.ORD_ID === data.ORD_ID
+    );
+    checkedArr.value.splice(index, 1);
   };
 
   return {
@@ -126,5 +143,7 @@ export const useCheckStore = defineStore('check', () => {
     allCheckHandler,
     selectRowSpanData,
     selectRowData,
+    addCheckedArr,
+    removeCheckedArr,
   };
 });

@@ -29,21 +29,16 @@ const countByDate = countSpanRow('ORG_ORD_ID');
 const checked = computed(
   // countByDate.count와 checkedArr를 핉터한 length가 같을때
   () =>
-  {
-    return countByDate[rowData.ORG_ORD_ID].count ===
+    countByDate[rowData.ORG_ORD_ID].count ===
     store.checkedArr.value.filter(
       (row) => row.ORG_ORD_ID === rowData.ORG_ORD_ID
-    ).length;
-  }
-    
+    ).length
 );
 
-const selectHandler = () => {
-  store.selectRowSpanData(rowData, allRowData);
-  
-  // TODO :: Span 대상 Row Index를 받아, selected 처리
-  // rowNode.setSelected(true);
-};
+const selectHandler = () => store.selectRowSpanData(rowData, allRowData);
+
+// TODO :: Span 대상 Row Index를 받아, selected 처리
+// rowNode.setSelected(true);
 </script>
 
 <style scoped>
