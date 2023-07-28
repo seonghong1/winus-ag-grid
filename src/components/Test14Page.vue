@@ -230,7 +230,7 @@ function onCellClicked(params) {
   // params.value 는 클릭된 셀의 값입니다.
   // params.event 는 클릭 이벤트 자체를 나타냅니다.
   
-  // 특정 컬럼만 처리하도록 필터링
+  // 특정 컬럼만 처리하도록 필터링 field로 구분인지 headerName인지 다시한번 확인 필요
   const targetColumns = ['columnName1', 'columnName2',];
   if (targetColumns.includes(params.colDef.field)) {
     console.log('특정 컬럼의 셀이 클릭되었습니다.');
