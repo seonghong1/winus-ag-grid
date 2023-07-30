@@ -17,34 +17,34 @@
 </template>
 
 <script setup lang="ts">
-import { AgGridVue } from 'ag-grid-vue3';
-import 'ag-grid-enterprise';
-import { IRowNode, ColDef, LicenseManager, GridApi } from 'ag-grid-enterprise';
+import { AgGridVue } from "ag-grid-vue3";
+import "ag-grid-enterprise";
+import { IRowNode, ColDef, LicenseManager, GridApi } from "ag-grid-enterprise";
 
-import { dummy_data } from '../../dummy';
-import { KEY } from '../../key';
+import { dummy_data } from "../../dummy";
+import { KEY } from "../../key";
 
 import {
   GridOptions,
   CellClassParams,
   RowSpanParams,
   RowSelectedEvent,
-} from 'ag-grid-community';
+} from "ag-grid-community";
 
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-import CheckboxRenderer from '../renderer/CheckboxRenderer.vue';
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
+import CheckboxRenderer from "../renderer/CheckboxRenderer.vue";
 
-import { countSpanRow } from '../utils/spanRow';
-import { useCheckStore } from '../store/check';
-import { computed, watch } from 'vue';
-import { RowI } from '../types/row.type';
+import { countSpanRow } from "../utils/spanRow";
+import { useCheckStore } from "../store/check";
+import { computed, watch } from "vue";
+import { RowI } from "../types/row.type";
 
 LicenseManager.setLicenseKey(KEY);
 
 const store = useCheckStore();
 
-const countByDate = countSpanRow('ORG_ORD_ID') as typeof dummy_data;
+const countByDate = countSpanRow("ORG_ORD_ID") as typeof dummy_data;
 
 const checked = computed(
   () => store.checkedArr.value.length === dummy_data.length
@@ -61,98 +61,98 @@ const allCheckHandler = () => {
 
 const columnDefs: ColDef[] = [
   {
-    headerName: '',
-    field: '',
+    headerName: "",
+    field: "",
     cellRenderer: CheckboxRenderer,
     rowSpan: rowSpan,
     cellClassRules: {
-      'cell-span': cellSpanRule,
+      "cell-span": cellSpanRule,
     },
     width: 50,
   },
   {
-    headerName: '',
-    field: '',
+    headerName: "",
+    field: "",
     width: 50,
   },
   {
-    headerName: '주문정보',
-    cellClass: 'grid-cell-centered',
+    headerName: "주문정보",
+    cellClass: "grid-cell-centered",
     // @ts-ignore
     children: [
       {
-        field: 'ORG_ORD_ID',
-        headerName: '원주문번호',
+        field: "ORG_ORD_ID",
+        headerName: "원주문번호",
         width: 250,
-        cellClass: 'grid-cell-centered',
+        cellClass: "grid-cell-centered",
         rowSpan: rowSpan,
         cellClassRules: {
-          'cell-span': cellSpanRule,
+          "cell-span": cellSpanRule,
         },
       },
       {
-        field: 'ORD_ID',
-        headerName: '주문번호',
+        field: "ORD_ID",
+        headerName: "주문번호",
         width: 150,
         checkboxSelection: true,
       },
       {
-        field: 'ORD_SEQ',
-        headerName: 'SEQ',
+        field: "ORD_SEQ",
+        headerName: "SEQ",
         width: 80,
       },
       {
-        field: 'ORD_DEGREE',
-        headerName: '차수',
+        field: "ORD_DEGREE",
+        headerName: "차수",
         width: 80,
       },
       {
-        field: 'OUT_REQ_DT',
-        headerName: '출고예정일',
+        field: "OUT_REQ_DT",
+        headerName: "출고예정일",
         width: 130,
       },
     ],
   },
   {
-    headerName: '상품정보',
+    headerName: "상품정보",
     // @ts-ignore
     children: [
       {
-        field: 'RITEM_NM',
-        headerName: '상품명',
+        field: "RITEM_NM",
+        headerName: "상품명",
         width: 200,
       },
       {
-        field: 'OUT_ORD_QTY',
-        headerName: '수량',
+        field: "OUT_ORD_QTY",
+        headerName: "수량",
         width: 80,
       },
     ],
   },
   {
-    headerName: '고객정보',
+    headerName: "고객정보",
     // @ts-ignore
     children: [
       {
-        field: 'P_SALES_CUST_NM',
-        headerName: '수화인',
+        field: "P_SALES_CUST_NM",
+        headerName: "수화인",
         width: 100,
       },
       {
-        field: 'PHONE_1',
-        headerName: '번호',
+        field: "PHONE_1",
+        headerName: "번호",
         width: 150,
       },
       {
-        field: 'ADDR',
-        headerName: '주소',
+        field: "ADDR",
+        headerName: "주소",
         width: 300,
       },
     ],
   },
   {
-    field: 'DATA_SENDER_NM',
-    headerName: '판매처',
+    field: "DATA_SENDER_NM",
+    headerName: "판매처",
     width: 100,
   },
 ];
@@ -169,8 +169,10 @@ const gridOptions: GridOptions = {
   rowData,
   suppressRowTransform: true, // 병합 전제조건
   rowBuffer: 100,
+  // row클릭시 체크박스 체크방지
   suppressRowClickSelection: true,
   onGridReady: onGridReady,
+  // onCellClicked: onCellClicked,
 };
 function rowSpan(params: RowSpanParams) {
   const data = params.data.ORG_ORD_ID;
@@ -197,65 +199,44 @@ function cellSpanRule(params: CellClassParams) {
 function onGridReady(params: any) {
   gridApi = params.api;
 }
+
 function onRowSelected(event: RowSelectedEvent) {
   const rowNode: IRowNode = event.node;
-  if (rowNode.isSelected()) {
-    store.addCheckedArr(rowNode.data);
-  } else {
-    store.removeCheckedArr(rowNode.data);
-  }
+
+  store.addCheckedArr(rowNode.data, rowNode.isSelected() as boolean);
 }
-watch(store.checkedArr, () => {
-  rowData.forEach((checkedItem: RowI, i) => {
-    console.log(i);
-    const index = store.checkedArr.value.findIndex(
-      (rowDataItem: RowI) => rowDataItem.ORD_ID === checkedItem.ORD_ID
-    );
-    if (index !== -1) {
-      return gridApi?.getRowNode(index)?.setSelected(true);
-    } else {
-      return gridApi?.getRowNode(i)?.setSelected(false);
+
+watch(
+  store.checkedSpanRow,
+  () => {
+    console.log("checkedSpanRow : ", store.checkedSpanRow.value);
+    for (let i = 0; rowData.length > i; i++) {
+      const index = store.checkedSpanRow.value.findIndex((spanRowItem) => {
+        return spanRowItem.ORG_ORD_ID === rowData[i].ORG_ORD_ID;
+      });
+      if (index !== -1) {
+        gridApi?.getRowNode(String(i))?.setSelected(true);
+      } else {
+        gridApi?.getRowNode(String(i))?.setSelected(false);
+      }
     }
-  });
-});
+  },
+  { deep: true }
+);
 
 /*
-  컬럼의 체크박스는 특정 컬럼 클릭시로 변경
-  그러면 값이 change되거나 행을 클릭했을때 호출되지 않고 특정 컬럼을 클릭해야만 호출됨
+  1. 셀 체크박스 클릭시 checkedArr에는 push가 되지만 checkedSpanRow 배열에는 추가되지 않음()
 
-  // onCellClicked 이벤트 핸들러
-function onCellClicked(params) {
-  // params.colDef 는 클릭된 셀의 컬럼 정의를 나타냅니다.
-  // params.data 는 클릭된 셀의 행 데이터를 나타냅니다.
-  // params.value 는 클릭된 셀의 값입니다.
-  // params.event 는 클릭 이벤트 자체를 나타냅니다.
-  
-  // 특정 컬럼만 처리하도록 필터링 field로 구분인지 headerName인지 다시한번 확인 필요
-  const targetColumns = ['columnName1', 'columnName2',];
-  if (targetColumns.includes(params.colDef.field)) {
-    console.log('특정 컬럼의 셀이 클릭되었습니다.');
-    console.log('클릭된 컬럼의 이름:', params.colDef.headerName);
-    console.log('클릭된 셀의 행 데이터:', params.data);
-    console.log('클릭된 셀의 값:', params.value);
-  }
-}
+  2. 셀 체크박슥는 checkedSpanRow를 watch하고 있어서 rowspan영역의 체크박스를 모두 클릭하고, 다른 rowspan 체크박스랜더러를 클릭하면,
+     셀 체크박스를 직접 체크한 아이템들이 해제됨
 
-// 그리드 초기화
-const gridOptions = {
-  // ... 다른 옵션들 ...
-  onCellClicked: onCellClicked, // 이벤트 핸들러 연결
-};
+  3. 그럼 여기서 셀 체크박스가 checkedSpanRow배열에 push한다 ? -> 그러면 셀 체크박스는 checkedSpanRow배열을 바라보고있어 무한 루프가 발생됨
 
-// ag-Grid 그리드 생성
-new agGrid.Grid(gridDiv, gridOptions);
+  4. 셀 체크박스의 클릭 api는 존재하지 않음, 대신 onRowSelected이벤트가 있음. 이 이벤트는 타의적으로 해당 셀 체크박스의 상태가 변하거나 직접 클릭해서 상태를 변화시킬때 호출된다.
 
-
-
+  5. watch(store.checkedSpanRow , () => { 이 부분에서는 셀 체크박스의 상태를 타의적으로 바꾸는 로직이 있어 바꾸게 되면 onRowSelected 이게 다시 호출되어서 
+    무한루프가 발생됨.
 */
-// console.log();
-
-// 랜더러 체크박스 클릭시 실제 해당되는 row의 체크박스 상태글 selected로 해줌.
-// 실제 node select하고 어떤 용도로 사용? (좌측 체크박스 랜더러도 result에 체크된 애들의 rowdata를 저장해서 checked된 애들의 데이터를 export가능)
 </script>
 
 <style scoped>

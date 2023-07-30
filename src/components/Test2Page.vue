@@ -1,4 +1,4 @@
-<template>
+/<template>
   <div style="height: 100%">
     <div class="container">
       <AgGridVue
