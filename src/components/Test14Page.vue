@@ -2,18 +2,37 @@
   <div style="height: 100%">
     <input type="checkbox" :checked="checked" @click="allCheckHandler" />
     <AgGridVue
-      style="width: 90%; height: 600px"
+      style="width: 50%; height: 600px"
       class="ag-theme-alpine"
       :defaultColDef="defaultColDef"
       :gridOptions="gridOptions"
       @row-selected="onRowSelected"
       rowSelection="multiple"
     />
-  </div>
 
-  <textarea name="" id="" cols="30" rows="10">{{
-    store.checkedArr.value
-  }}</textarea>
+    <textarea
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      style="position: absolute; top: 0; right: 0; width: 600px; height: 50vh"
+    >
+checkedArr({{ store.checkedArr.value.length }}) : {{
+        store.checkedArr.value
+      }}</textarea
+    >
+    <textarea
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      style="position: absolute; top: 50%; right: 0; width: 600px; height: 50vh"
+    >
+SpanRowArr({{ store.checkedSpanRow.value.length }}) : {{
+        store.checkedSpanRow.value
+      }}</textarea
+    >
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -203,16 +222,19 @@ function onGridReady(params: any) {
 function onRowSelected(event: RowSelectedEvent) {
   const rowNode: IRowNode = event.node;
 
-  store.addCheckedArr(rowNode.data, rowNode.isSelected() as boolean);
+  if (event.event !== null) {
+    console.log(event.event);
+    store.addCheckedArr(rowNode.data, rowNode.isSelected() as boolean);
+  }
 }
 
 watch(
-  store.checkedSpanRow,
+  store.checkedArr,
   () => {
-    console.log("checkedSpanRow : ", store.checkedSpanRow.value);
+    console.log("checkedSpanRow : ", store.checkedArr.value);
     for (let i = 0; rowData.length > i; i++) {
-      const index = store.checkedSpanRow.value.findIndex((spanRowItem) => {
-        return spanRowItem.ORG_ORD_ID === rowData[i].ORG_ORD_ID;
+      const index = store.checkedArr.value.findIndex((spanRowItem) => {
+        return spanRowItem.ORD_ID === rowData[i].ORD_ID;
       });
       if (index !== -1) {
         gridApi?.getRowNode(String(i))?.setSelected(true);
