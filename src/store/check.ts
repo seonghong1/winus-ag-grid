@@ -1,15 +1,15 @@
-import { defineStore } from "pinia";
-import { reactive } from "vue";
-import { RowI } from "../types/row.type";
-import { countSpanRow } from "../utils/spanRow";
+import { defineStore } from 'pinia';
+import { reactive } from 'vue';
+import { RowI } from '../types/row.type';
+import { countSpanRow } from '../utils/spanRow';
 
-export const useCheckStore = defineStore("check", () => {
+export const useCheckStore = defineStore('check', () => {
   // 왼쪽 체크박스 체크된 리스트
   const checkedSpanRow = reactive({ value: [] as RowI[] });
   // 오른쪽 체크박스 체크된 리스트
   const checkedArr = reactive({ value: [] as RowI[] });
   // rowspan 만들때 사용한 객체
-  const countByDate = countSpanRow("ORG_ORD_ID");
+  const countByDate = countSpanRow('ORG_ORD_ID');
 
   const allCheckHandler = (
     allData: RowI[],
@@ -117,6 +117,7 @@ export const useCheckStore = defineStore("check", () => {
   // 체크박스 (렌더러 x)
   const addCheckedArr = (selectData: RowI, isSelected: boolean) => {
     // 클릭시 checkedarr에 넣기
+    console.log(isSelected);
     if (isSelected) {
       if (
         checkedArr.value.findIndex(
