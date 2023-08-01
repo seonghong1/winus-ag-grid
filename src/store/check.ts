@@ -1,15 +1,15 @@
-import { defineStore } from "pinia";
-import { reactive } from "vue";
-import { RowI } from "../types/row.type";
-import { countSpanRow } from "../utils/spanRow";
+import { defineStore } from 'pinia';
+import { reactive } from 'vue';
+import { RowI } from '../types/row.type';
+import { countSpanRow } from '../utils/spanRow';
 
-export const useCheckStore = defineStore("check", () => {
+export const useCheckStore = defineStore('check', () => {
   // 왼쪽 체크박스 체크된 리스트
   const checkedSpanRow = reactive({ value: [] as RowI[] });
   // 오른쪽 체크박스 체크된 리스트
   const checkedArr = reactive({ value: [] as RowI[] });
   // rowspan 만들때 사용한 객체
-  const countByDate = countSpanRow("ORG_ORD_ID");
+  const countByDate = countSpanRow('ORG_ORD_ID');
 
   const allCheckHandler = (
     allData: RowI[],
@@ -67,11 +67,8 @@ export const useCheckStore = defineStore("check", () => {
         (row) => row.ORG_ORD_ID !== selectData.ORG_ORD_ID
       );
     }
-
-    console.log("checkedSpanRow", checkedSpanRow.value);
-    console.log("checkedArr", checkedArr.value);
   };
-  // 오른쪽 체크박스 클릭시 호출 , rowdata가 전달됨
+  // 오른쪽 체크박스 클릭시 호출 , rowdata가 전달됨ㄹ
   const selectRowData = (selectData: RowI) => {
     // checkedArr에 이미 값이 존재(체크됨)하는지 체크 / -1(없음), 그외 있음
     const existingCheckedIndex = checkedArr.value.findIndex(
@@ -115,9 +112,53 @@ export const useCheckStore = defineStore("check", () => {
         );
       }
     }
+  };
 
-    console.log("checkedSpanRow", checkedSpanRow.value);
-    console.log("checkedArr", checkedArr.value);
+  // 체크박스 (렌더러 x)
+  const addCheckedArr = (selectData: RowI, isSelected: boolean) => {
+    // 클릭시 checkedarr에 넣기
+    console.log(isSelected);
+    if (isSelected) {
+      if (
+        checkedArr.value.findIndex(
+          (checkedItem) => checkedItem.ORD_ID === selectData.ORD_ID
+        ) === -1
+      ) {
+        checkedArr.value.push(selectData);
+
+        //checkedArr에서 내가 누른 rowdata.id와 같은 값들로 새 배열생성
+        const filteredCheckedArr = checkedArr.value.filter(
+          (row) => row.ORG_ORD_ID === selectData.ORG_ORD_ID
+        );
+        // 내가 누른 rowdata의 개수와, 내가 누른 rowdata의 총 range가 같을때
+        if (
+          filteredCheckedArr.length === countByDate[selectData.ORG_ORD_ID].count
+        )
+          checkedSpanRow.value.push(selectData);
+        else {
+          checkedSpanRow.value = checkedSpanRow.value.filter(
+            (row) => row.ORG_ORD_ID !== selectData.ORG_ORD_ID
+          );
+        }
+      }
+    } else {
+      checkedArr.value = checkedArr.value.filter((ckeckedItem) => {
+        return ckeckedItem.ORD_ID !== selectData.ORD_ID;
+      });
+
+      const filteredCheckedArr = checkedArr.value.filter(
+        (row) => row.ORG_ORD_ID === selectData.ORG_ORD_ID
+      );
+      // 필터링한 이후 range와 count가 다르면
+      if (
+        filteredCheckedArr.length !== countByDate[selectData.ORG_ORD_ID].count
+      ) {
+        // 오른쪽 체크박스에서 내가 클릭한 체크박스와 같은 id를 가진 값을 제거
+        checkedSpanRow.value = checkedSpanRow.value.filter(
+          (row) => row.ORG_ORD_ID !== selectData.ORG_ORD_ID
+        );
+      }
+    }
   };
 
   return {
@@ -126,5 +167,6 @@ export const useCheckStore = defineStore("check", () => {
     allCheckHandler,
     selectRowSpanData,
     selectRowData,
+    addCheckedArr,
   };
 });
