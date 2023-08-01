@@ -125,6 +125,38 @@ export const useCheckStore = defineStore('check', () => {
         ) === -1
       ) {
         checkedArr.value.push(selectData);
+
+        //checkedArr에서 내가 누른 rowdata.id와 같은 값들로 새 배열생성
+        const filteredCheckedArr = checkedArr.value.filter(
+          (row) => row.ORG_ORD_ID === selectData.ORG_ORD_ID
+        );
+        // 내가 누른 rowdata의 개수와, 내가 누른 rowdata의 총 range가 같을때
+        if (
+          filteredCheckedArr.length === countByDate[selectData.ORG_ORD_ID].count
+        )
+          checkedSpanRow.value.push(selectData);
+        else {
+          checkedSpanRow.value = checkedSpanRow.value.filter(
+            (row) => row.ORG_ORD_ID !== selectData.ORG_ORD_ID
+          );
+        }
+      }
+    } else {
+      checkedArr.value = checkedArr.value.filter((ckeckedItem) => {
+        return ckeckedItem.ORD_ID !== selectData.ORD_ID;
+      });
+
+      const filteredCheckedArr = checkedArr.value.filter(
+        (row) => row.ORG_ORD_ID === selectData.ORG_ORD_ID
+      );
+      // 필터링한 이후 range와 count가 다르면
+      if (
+        filteredCheckedArr.length !== countByDate[selectData.ORG_ORD_ID].count
+      ) {
+        // 오른쪽 체크박스에서 내가 클릭한 체크박스와 같은 id를 가진 값을 제거
+        checkedSpanRow.value = checkedSpanRow.value.filter(
+          (row) => row.ORG_ORD_ID !== selectData.ORG_ORD_ID
+        );
       }
     }
   };
